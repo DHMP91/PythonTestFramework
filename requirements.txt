@@ -14,6 +14,7 @@ locust
 #UI Test Specifics
 playwright
 pytest-playwright
+git+https://github.com/DHMP91/PlayPOM.git
 
 #API Test Specifics
 requests
