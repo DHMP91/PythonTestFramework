@@ -1,0 +1,23 @@
+# Test Framework Specifics
+pytest
+pytest-html
+pytest-variables[yaml]
+pytest-xdist
+pytest-rerunfailures
+py>=1.5.0
+pyyaml
+polling
+
+#Performance Test Specifics
+locust
+
+#UI Test Specifics
+playwright
+pytest-playwright
+
+#API Test Specifics
+requests
+openapi-python-client
+
+#Assertion Library
+PyHamcrest
