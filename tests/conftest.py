@@ -1,0 +1,1 @@
+# Global conftest for all UI/PERFORMANCE/API/ related fixtures
