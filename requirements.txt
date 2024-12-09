@@ -10,6 +10,7 @@ polling
 
 #Performance Test Specifics
 locust
+pandas
 
 #UI Test Specifics
 playwright
