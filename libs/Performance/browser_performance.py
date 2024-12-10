@@ -36,7 +36,13 @@ class RequestProfiling(object):
     def __init__(self, page: Page):
         self.page: Page = page
 
-    def run(self, perform_action: Callable, request_matcher: Callable[[Request], bool], sample_size = 10, sampling_interval = 1000, emulate_network: NetworkType = None) -> DataFrame:
+    def run(self,
+            perform_action: Callable,
+            request_matcher: Callable[[Request], bool],
+            sample_size = 10,
+            sampling_interval = 1000,
+            emulate_network: NetworkType = None
+    ) -> DataFrame:
         """
         :param perform_action:  Function call to trigger the request of interest.
                                 Timer start function returns.
@@ -45,17 +51,16 @@ class RequestProfiling(object):
         :param sample_size: Default 10. Run the perform_action N amount of times
         :param sampling_interval: Default 1. Sleep time between sampling in milliseconds
         :param emulate_network: Default None: Set the browser to an emulated network speed. Chromium only
-        :return: dictionary of statistic in milliseconds
-                {
-                    "test_start_time": float, # When the test timer started
-                    "time_to_request": float, # Time between timer started to request fired
-                    "request_start_time": float, # Time when request started
-                    "response_start_time": float, # Time when response started
-                    "response_end_time": float, # Time when response ended
-                    "request_total_time": float, # Time between test started and response end time
-                }
+        :return: Panda's DataFrame object describing the following fields:
+                "test_start_time": float, # When the test timer started
+                "time_to_request": float, # Time between timer started to request fired
+                "request_start_time": float, # Time when request started
+                "response_start_time": float, # Time when response started
+                "response_end_time": float, # Time when response ended
+                "request_total_time": float, # Time between test started and response end time
         """
 
+        # Chromium emulate network condition
         if emulate_network and self.page.context.browser.browser_type.name.lower() == "chromium":
             network_conditions = NETWORK_SETTINGS[emulate_network]
             session = None
@@ -67,6 +72,7 @@ class RequestProfiling(object):
                     session.detach()
 
 
+        # Run test and write each result to temp csv file
         keys = self.__stats.keys()
         tmp_file = tempfile.NamedTemporaryFile(suffix=".csv", delete=False)
         with open(tmp_file.name, "w", newline='') as csv_file:
@@ -77,8 +83,9 @@ class RequestProfiling(object):
                 writer.writerow(stats)
                 time.sleep(sampling_interval / 1000)
 
-        chunks = pandas.read_csv(tmp_file.name, chunksize=100000)
 
+        # Read build statistic on entire result from csv file
+        chunks = pandas.read_csv(tmp_file.name, chunksize=100000)
         descriptive_stats = []
         for chunk in chunks:
             descriptive_stats.append(chunk.describe())
@@ -91,15 +98,17 @@ class RequestProfiling(object):
     def __sample(self, perform_action: Callable, request_matcher: Callable[[Request], bool]):
         while True:
             with self.page.expect_request(lambda request: request_matcher(request)) as request_info:
-                now = time.time()
+                now = time.time() # default test start timestamp
                 func_time = perform_action()
+
+                # callable function provider their own timestamp
                 if func_time:
                     now = func_time
 
             request_data = request_info.value
             request_resource_timing = request_data.timing
             sample_stat = self.__stats
-            sample_stat["test_start_time"] = now * 1000
+            sample_stat["test_start_time"] = now * 1000 # convert to milliseconds
             time_to_request = request_resource_timing["startTime"] - sample_stat["test_start_time"]
             sample_stat["time_to_request"] = time_to_request
             sample_stat["request_start_time"] = request_resource_timing["startTime"]
