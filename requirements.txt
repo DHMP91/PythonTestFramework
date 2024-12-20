@@ -20,6 +20,7 @@ git+https://github.com/DHMP91/PlayPOM.git
 #API Test Specifics
 requests
 openapi-python-client
+httpx
 
 #Assertion Library
 PyHamcrest

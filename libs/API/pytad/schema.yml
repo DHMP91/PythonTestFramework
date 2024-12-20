@@ -1,0 +1,453 @@
+openapi: 3.0.3
+info:
+  title: PYTAD API
+  version: 1.0.0
+  description: API for test reporting
+paths:
+  /health/api:
+    get:
+      operationId: health_api_retrieve
+      tags:
+      - health
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /testcases/api/list:
+    get:
+      operationId: testcases_api_list_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - testcases
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTestCaseList'
+          description: ''
+  /testcases/api/testcase:
+    post:
+      operationId: testcases_api_testcase_create
+      tags:
+      - testcases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestCase'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCase'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCase'
+          description: ''
+  /testcases/api/testcase/{id}:
+    get:
+      operationId: testcases_api_testcase_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - testcases
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCase'
+          description: ''
+    put:
+      operationId: testcases_api_testcase_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - testcases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestCase'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCase'
+          description: ''
+    delete:
+      operationId: testcases_api_testcase_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - testcases
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /testcases/api/testcase/{id}/testrun:
+    post:
+      operationId: testcases_api_testcase_testrun_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - testcases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTestRun'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestRun'
+          description: ''
+  /testcases/api/testcase/{id}/testruns:
+    get:
+      operationId: testcases_api_testcase_testruns_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - testcases
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTestRunList'
+          description: ''
+  /testcases/api/testcase/search:
+    post:
+      operationId: testcases_api_testcase_search_create
+      tags:
+      - testcases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchTestCase'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCase'
+          description: ''
+  /testcases/api/testrun/{id}:
+    get:
+      operationId: testcases_api_testrun_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - testcases
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestRun'
+          description: ''
+    put:
+      operationId: testcases_api_testrun_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - testcases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestRun'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestRun'
+          description: ''
+    delete:
+      operationId: testcases_api_testrun_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - testcases
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    NewTestRun:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        suite_id:
+          type: string
+          maxLength: 30
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        start_time:
+          type: string
+          format: date-time
+          readOnly: true
+        end_time:
+          type: string
+          format: date-time
+          nullable: true
+        marks:
+          type: string
+          maxLength: 30
+        product_version:
+          type: string
+          maxLength: 30
+        environment:
+          type: string
+          maxLength: 200
+        defects:
+          type: string
+          maxLength: 100
+      required:
+      - name
+      - start_time
+    PaginatedTestCaseList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCase'
+    PaginatedTestRunList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestRun'
+    SearchTestCase:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        relative_path:
+          type: string
+          maxLength: 300
+        code_hash:
+          type: string
+          nullable: true
+          maxLength: 300
+        internal_id:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - name
+      - relative_path
+    StatusEnum:
+      enum:
+      - PASSED
+      - FAILED
+      - ERROR
+      - UNKNOWN
+      - XFAILED
+      - XPASSED
+      - SKIPPED
+      - INPROGRESS
+      type: string
+      description: |-
+        * `PASSED` - Pass
+        * `FAILED` - Fail
+        * `ERROR` - Error
+        * `UNKNOWN` - Unknown
+        * `XFAILED` - Xfail
+        * `XPASSED` - Xpass
+        * `SKIPPED` - Skipped
+        * `INPROGRESS` - Inprogress
+    TestCase:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        relative_path:
+          type: string
+          maxLength: 300
+        create_date:
+          type: string
+          format: date-time
+          readOnly: true
+        code_hash:
+          type: string
+          nullable: true
+          maxLength: 300
+        internal_id:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - create_date
+      - id
+      - name
+      - relative_path
+    TestRun:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        suite_id:
+          type: string
+          maxLength: 30
+        test_id:
+          type: integer
+          nullable: true
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        start_time:
+          type: string
+          format: date-time
+          readOnly: true
+        end_time:
+          type: string
+          format: date-time
+          nullable: true
+        marks:
+          type: string
+          maxLength: 30
+        product_version:
+          type: string
+          maxLength: 30
+        environment:
+          type: string
+          maxLength: 200
+        defects:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+      - start_time
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

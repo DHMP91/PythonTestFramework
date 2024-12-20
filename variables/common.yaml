@@ -1,0 +1,9 @@
+pytad:
+  enable: False
+  base_url: "http://127.0.0.1:8000"
+  api_key: "" # Do not store api key here. Only set for dev env. Use dev_ prefix yaml file to prevent committing
+
+
+product_detail: ""
+  
+browser_detail: ""
