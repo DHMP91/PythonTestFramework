@@ -8,9 +8,8 @@ Library:
 - Playwright pytest plugin https://github.com/microsoft/playwright-pytest
 
 
-
 Custom features:
-- Page object model implementation with Playwright https://github.com/DHMP91/PlayPOM/
+- Page object model implementation with Playwright: [PlayPOM](https://github.com/DHMP91/PlayPOM/)
   - samples: tests/UI/sample/test_github.py, tests/UI/sample/test_google.py
 - Request level profiling:
   - Every product have specific request(s) that needs special validation points
@@ -21,7 +20,8 @@ Custom features:
     - "response_start_time": Time when response started
     - "response_end_time": Time when response ended
     - "request_total_time": Time between page start or page action tp response end time
-
+- Integration with [PyTAD](https://github.com/DHMP91/PyTAD)
+    - See https://github.com/DHMP91/PyTAD for more details on features
 
 # Q & A:
 **Why is "time_to_request" an important metric?**
