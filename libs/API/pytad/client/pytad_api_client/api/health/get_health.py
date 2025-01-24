@@ -8,19 +8,17 @@ from ...client import AuthenticatedClient, Client
 from ...types import Response
 
 
-def _get_kwargs(
-    id: int,
-) -> Dict[str, Any]:
+def _get_kwargs() -> Dict[str, Any]:
     _kwargs: Dict[str, Any] = {
-        "method": "delete",
-        "url": f"/testcases/api/testrun/{id}",
+        "method": "get",
+        "url": "/health/api",
     }
 
     return _kwargs
 
 
 def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[Any]:
-    if response.status_code == 204:
+    if response.status_code == 200:
         return None
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -38,13 +36,10 @@ def _build_response(*, client: Union[AuthenticatedClient, Client], response: htt
 
 
 def sync_detailed(
-    id: int,
     *,
     client: AuthenticatedClient,
 ) -> Response[Any]:
-    """
-    Args:
-        id (int):
+    """Endpoint to test out service state
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -54,9 +49,7 @@ def sync_detailed(
         Response[Any]
     """
 
-    kwargs = _get_kwargs(
-        id=id,
-    )
+    kwargs = _get_kwargs()
 
     response = client.get_httpx_client().request(
         **kwargs,
@@ -66,13 +59,10 @@ def sync_detailed(
 
 
 async def asyncio_detailed(
-    id: int,
     *,
     client: AuthenticatedClient,
 ) -> Response[Any]:
-    """
-    Args:
-        id (int):
+    """Endpoint to test out service state
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -82,9 +72,7 @@ async def asyncio_detailed(
         Response[Any]
     """
 
-    kwargs = _get_kwargs(
-        id=id,
-    )
+    kwargs = _get_kwargs()
 
     response = await client.get_async_httpx_client().request(**kwargs)
 

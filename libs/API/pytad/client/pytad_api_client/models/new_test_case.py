@@ -7,17 +7,19 @@ from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="TestCase")
+T = TypeVar("T", bound="NewTestCase")
 
 
 @_attrs_define
-class TestCase:
+class NewTestCase:
     """
     Attributes:
         id (int):
         name (str):
         relative_path (str):
         create_date (datetime.datetime):
+        code_hash (str):
+        code (str):
         internal_id (Union[None, Unset, str]):
     """
 
@@ -25,6 +27,8 @@ class TestCase:
     name: str
     relative_path: str
     create_date: datetime.datetime
+    code_hash: str
+    code: str
     internal_id: Union[None, Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -36,6 +40,10 @@ class TestCase:
         relative_path = self.relative_path
 
         create_date = self.create_date.isoformat()
+
+        code_hash = self.code_hash
+
+        code = self.code
 
         internal_id: Union[None, Unset, str]
         if isinstance(self.internal_id, Unset):
@@ -51,6 +59,8 @@ class TestCase:
                 "name": name,
                 "relative_path": relative_path,
                 "create_date": create_date,
+                "code_hash": code_hash,
+                "code": code,
             }
         )
         if internal_id is not UNSET:
@@ -69,6 +79,10 @@ class TestCase:
 
         create_date = isoparse(d.pop("create_date"))
 
+        code_hash = d.pop("code_hash")
+
+        code = d.pop("code")
+
         def _parse_internal_id(data: object) -> Union[None, Unset, str]:
             if data is None:
                 return data
@@ -78,16 +92,18 @@ class TestCase:
 
         internal_id = _parse_internal_id(d.pop("internal_id", UNSET))
 
-        test_case = cls(
+        new_test_case = cls(
             id=id,
             name=name,
             relative_path=relative_path,
             create_date=create_date,
+            code_hash=code_hash,
+            code=code,
             internal_id=internal_id,
         )
 
-        test_case.additional_properties = d
-        return test_case
+        new_test_case.additional_properties = d
+        return new_test_case
 
     @property
     def additional_keys(self) -> List[str]:

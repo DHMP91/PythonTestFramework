@@ -17,6 +17,7 @@ class NewTestRun:
     Attributes:
         name (str):
         start_time (datetime.datetime):
+        code_hash (str):
         suite_id (Union[Unset, str]):
         status (Union[Unset, StatusEnum]): * `PASSED` - Pass
             * `FAILED` - Fail
@@ -35,6 +36,7 @@ class NewTestRun:
 
     name: str
     start_time: datetime.datetime
+    code_hash: str
     suite_id: Union[Unset, str] = UNSET
     status: Union[Unset, StatusEnum] = UNSET
     end_time: Union[None, Unset, datetime.datetime] = UNSET
@@ -48,6 +50,8 @@ class NewTestRun:
         name = self.name
 
         start_time = self.start_time.isoformat()
+
+        code_hash = self.code_hash
 
         suite_id = self.suite_id
 
@@ -77,6 +81,7 @@ class NewTestRun:
             {
                 "name": name,
                 "start_time": start_time,
+                "code_hash": code_hash,
             }
         )
         if suite_id is not UNSET:
@@ -102,6 +107,8 @@ class NewTestRun:
         name = d.pop("name")
 
         start_time = isoparse(d.pop("start_time"))
+
+        code_hash = d.pop("code_hash")
 
         suite_id = d.pop("suite_id", UNSET)
 
@@ -140,6 +147,7 @@ class NewTestRun:
         new_test_run = cls(
             name=name,
             start_time=start_time,
+            code_hash=code_hash,
             suite_id=suite_id,
             status=status,
             end_time=end_time,

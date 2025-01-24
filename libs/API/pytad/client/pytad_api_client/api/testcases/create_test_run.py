@@ -57,7 +57,8 @@ def sync_detailed(
     client: AuthenticatedClient,
     body: NewTestRun,
 ) -> Response[TestRun]:
-    """
+    """Create new Test Run
+
     Args:
         id (int):
         body (NewTestRun):
@@ -88,7 +89,8 @@ def sync(
     client: AuthenticatedClient,
     body: NewTestRun,
 ) -> Optional[TestRun]:
-    """
+    """Create new Test Run
+
     Args:
         id (int):
         body (NewTestRun):
@@ -114,7 +116,8 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     body: NewTestRun,
 ) -> Response[TestRun]:
-    """
+    """Create new Test Run
+
     Args:
         id (int):
         body (NewTestRun):
@@ -143,7 +146,8 @@ async def asyncio(
     client: AuthenticatedClient,
     body: NewTestRun,
 ) -> Optional[TestRun]:
-    """
+    """Create new Test Run
+
     Args:
         id (int):
         body (NewTestRun):

@@ -5,34 +5,24 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.paginated_test_case_list import PaginatedTestCaseList
-from ...types import UNSET, Response, Unset
+from ...models.test_run import TestRun
+from ...types import Response
 
 
 def _get_kwargs(
-    *,
-    page: Union[Unset, int] = UNSET,
+    id: int,
 ) -> Dict[str, Any]:
-    params: Dict[str, Any] = {}
-
-    params["page"] = page
-
-    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
-
     _kwargs: Dict[str, Any] = {
         "method": "get",
-        "url": "/testcases/api/list",
-        "params": params,
+        "url": f"/testcases/api/testrun/{id}",
     }
 
     return _kwargs
 
 
-def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[PaginatedTestCaseList]:
+def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[TestRun]:
     if response.status_code == 200:
-        response_200 = PaginatedTestCaseList.from_dict(response.json())
+        response_200 = TestRun.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -41,9 +31,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[PaginatedTestCaseList]:
+def _build_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Response[TestRun]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -53,24 +41,25 @@ def _build_response(
 
 
 def sync_detailed(
+    id: int,
     *,
     client: AuthenticatedClient,
-    page: Union[Unset, int] = UNSET,
-) -> Response[PaginatedTestCaseList]:
-    """
+) -> Response[TestRun]:
+    """Get test run by id
+
     Args:
-        page (Union[Unset, int]):
+        id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[PaginatedTestCaseList]
+        Response[TestRun]
     """
 
     kwargs = _get_kwargs(
-        page=page,
+        id=id,
     )
 
     response = client.get_httpx_client().request(
@@ -81,47 +70,49 @@ def sync_detailed(
 
 
 def sync(
+    id: int,
     *,
     client: AuthenticatedClient,
-    page: Union[Unset, int] = UNSET,
-) -> Optional[PaginatedTestCaseList]:
-    """
+) -> Optional[TestRun]:
+    """Get test run by id
+
     Args:
-        page (Union[Unset, int]):
+        id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        PaginatedTestCaseList
+        TestRun
     """
 
     return sync_detailed(
+        id=id,
         client=client,
-        page=page,
     ).parsed
 
 
 async def asyncio_detailed(
+    id: int,
     *,
     client: AuthenticatedClient,
-    page: Union[Unset, int] = UNSET,
-) -> Response[PaginatedTestCaseList]:
-    """
+) -> Response[TestRun]:
+    """Get test run by id
+
     Args:
-        page (Union[Unset, int]):
+        id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[PaginatedTestCaseList]
+        Response[TestRun]
     """
 
     kwargs = _get_kwargs(
-        page=page,
+        id=id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -130,25 +121,26 @@ async def asyncio_detailed(
 
 
 async def asyncio(
+    id: int,
     *,
     client: AuthenticatedClient,
-    page: Union[Unset, int] = UNSET,
-) -> Optional[PaginatedTestCaseList]:
-    """
+) -> Optional[TestRun]:
+    """Get test run by id
+
     Args:
-        page (Union[Unset, int]):
+        id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        PaginatedTestCaseList
+        TestRun
     """
 
     return (
         await asyncio_detailed(
+            id=id,
             client=client,
-            page=page,
         )
     ).parsed

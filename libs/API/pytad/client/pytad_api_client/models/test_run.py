@@ -17,9 +17,10 @@ class TestRun:
     Attributes:
         id (int):
         name (str):
+        test_id (int):
         start_time (datetime.datetime):
+        test_body_id (int):
         suite_id (Union[Unset, str]):
-        test_id (Union[None, Unset, int]):
         status (Union[Unset, StatusEnum]): * `PASSED` - Pass
             * `FAILED` - Fail
             * `ERROR` - Error
@@ -37,9 +38,10 @@ class TestRun:
 
     id: int
     name: str
+    test_id: int
     start_time: datetime.datetime
+    test_body_id: int
     suite_id: Union[Unset, str] = UNSET
-    test_id: Union[None, Unset, int] = UNSET
     status: Union[Unset, StatusEnum] = UNSET
     end_time: Union[None, Unset, datetime.datetime] = UNSET
     marks: Union[Unset, str] = UNSET
@@ -53,15 +55,13 @@ class TestRun:
 
         name = self.name
 
+        test_id = self.test_id
+
         start_time = self.start_time.isoformat()
 
-        suite_id = self.suite_id
+        test_body_id = self.test_body_id
 
-        test_id: Union[None, Unset, int]
-        if isinstance(self.test_id, Unset):
-            test_id = UNSET
-        else:
-            test_id = self.test_id
+        suite_id = self.suite_id
 
         status: Union[Unset, str] = UNSET
         if not isinstance(self.status, Unset):
@@ -89,13 +89,13 @@ class TestRun:
             {
                 "id": id,
                 "name": name,
+                "test_id": test_id,
                 "start_time": start_time,
+                "test_body_id": test_body_id,
             }
         )
         if suite_id is not UNSET:
             field_dict["suite_id"] = suite_id
-        if test_id is not UNSET:
-            field_dict["test_id"] = test_id
         if status is not UNSET:
             field_dict["status"] = status
         if end_time is not UNSET:
@@ -118,18 +118,13 @@ class TestRun:
 
         name = d.pop("name")
 
+        test_id = d.pop("test_id")
+
         start_time = isoparse(d.pop("start_time"))
 
+        test_body_id = d.pop("test_body_id")
+
         suite_id = d.pop("suite_id", UNSET)
-
-        def _parse_test_id(data: object) -> Union[None, Unset, int]:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(Union[None, Unset, int], data)
-
-        test_id = _parse_test_id(d.pop("test_id", UNSET))
 
         _status = d.pop("status", UNSET)
         status: Union[Unset, StatusEnum]
@@ -166,9 +161,10 @@ class TestRun:
         test_run = cls(
             id=id,
             name=name,
-            start_time=start_time,
-            suite_id=suite_id,
             test_id=test_id,
+            start_time=start_time,
+            test_body_id=test_body_id,
+            suite_id=suite_id,
             status=status,
             end_time=end_time,
             marks=marks,

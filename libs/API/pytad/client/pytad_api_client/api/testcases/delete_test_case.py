@@ -42,7 +42,8 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[Any]:
-    """
+    """Delete test case
+
     Args:
         id (int):
 
@@ -70,7 +71,8 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[Any]:
-    """
+    """Delete test case
+
     Args:
         id (int):
 

@@ -5,28 +5,18 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.search_test_case import SearchTestCase
 from ...models.test_case import TestCase
 from ...types import Response
 
 
 def _get_kwargs(
-    *,
-    body: SearchTestCase,
+    id: int,
 ) -> Dict[str, Any]:
-    headers: Dict[str, Any] = {}
-
     _kwargs: Dict[str, Any] = {
-        "method": "post",
-        "url": "/testcases/api/testcase/search",
+        "method": "get",
+        "url": f"/testcases/api/testcase/{id}",
     }
 
-    _body = body.to_dict()
-
-    _kwargs["json"] = _body
-    headers["Content-Type"] = "application/json"
-
-    _kwargs["headers"] = headers
     return _kwargs
 
 
@@ -51,13 +41,14 @@ def _build_response(*, client: Union[AuthenticatedClient, Client], response: htt
 
 
 def sync_detailed(
+    id: int,
     *,
     client: AuthenticatedClient,
-    body: SearchTestCase,
 ) -> Response[TestCase]:
-    """
+    """Get test case by id
+
     Args:
-        body (SearchTestCase):
+        id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -68,7 +59,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        body=body,
+        id=id,
     )
 
     response = client.get_httpx_client().request(
@@ -79,13 +70,14 @@ def sync_detailed(
 
 
 def sync(
+    id: int,
     *,
     client: AuthenticatedClient,
-    body: SearchTestCase,
 ) -> Optional[TestCase]:
-    """
+    """Get test case by id
+
     Args:
-        body (SearchTestCase):
+        id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -96,19 +88,20 @@ def sync(
     """
 
     return sync_detailed(
+        id=id,
         client=client,
-        body=body,
     ).parsed
 
 
 async def asyncio_detailed(
+    id: int,
     *,
     client: AuthenticatedClient,
-    body: SearchTestCase,
 ) -> Response[TestCase]:
-    """
+    """Get test case by id
+
     Args:
-        body (SearchTestCase):
+        id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -119,7 +112,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        body=body,
+        id=id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -128,13 +121,14 @@ async def asyncio_detailed(
 
 
 async def asyncio(
+    id: int,
     *,
     client: AuthenticatedClient,
-    body: SearchTestCase,
 ) -> Optional[TestCase]:
-    """
+    """Get test case by id
+
     Args:
-        body (SearchTestCase):
+        id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -146,7 +140,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
+            id=id,
             client=client,
-            body=body,
         )
     ).parsed

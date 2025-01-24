@@ -56,7 +56,8 @@ def sync_detailed(
     client: AuthenticatedClient,
     body: TestRun,
 ) -> Response[TestRun]:
-    """
+    """Update test run by id
+
     Args:
         id (int):
         body (TestRun):
@@ -87,7 +88,8 @@ def sync(
     client: AuthenticatedClient,
     body: TestRun,
 ) -> Optional[TestRun]:
-    """
+    """Update test run by id
+
     Args:
         id (int):
         body (TestRun):
@@ -113,7 +115,8 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     body: TestRun,
 ) -> Response[TestRun]:
-    """
+    """Update test run by id
+
     Args:
         id (int):
         body (TestRun):
@@ -142,7 +145,8 @@ async def asyncio(
     client: AuthenticatedClient,
     body: TestRun,
 ) -> Optional[TestRun]:
-    """
+    """Update test run by id
+
     Args:
         id (int):
         body (TestRun):

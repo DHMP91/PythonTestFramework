@@ -36,3 +36,29 @@ def test_parametrize(a,b,c):
 def test_mark_test_id():
     #test_mark_test_id
     pass
+
+@pytest.mark.test_id()
+def test_test_id_no_param():
+    #test_test_id_no_param
+    pass
+
+def test_dummy2():
+    #test_dummy2
+    pass
+
+def test_dummy3():
+    #test_dummy3
+    if True:
+        pass
+
+def test_dummy4():
+    #test_dummy4
+    pass
+
+def test_dummy5():
+    #test_dummy5
+    pass
+
+def test_dummy6():
+    #test_dummy6
+    pass

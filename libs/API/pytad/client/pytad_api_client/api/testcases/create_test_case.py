@@ -5,13 +5,14 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.new_test_case import NewTestCase
 from ...models.test_case import TestCase
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    body: TestCase,
+    body: NewTestCase,
 ) -> Dict[str, Any]:
     headers: Dict[str, Any] = {}
 
@@ -56,11 +57,12 @@ def _build_response(*, client: Union[AuthenticatedClient, Client], response: htt
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    body: TestCase,
+    body: NewTestCase,
 ) -> Response[TestCase]:
-    """
+    """Create Test Cases. Has test change resiliency feature
+
     Args:
-        body (TestCase):
+        body (NewTestCase):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -84,11 +86,12 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    body: TestCase,
+    body: NewTestCase,
 ) -> Optional[TestCase]:
-    """
+    """Create Test Cases. Has test change resiliency feature
+
     Args:
-        body (TestCase):
+        body (NewTestCase):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -107,11 +110,12 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    body: TestCase,
+    body: NewTestCase,
 ) -> Response[TestCase]:
-    """
+    """Create Test Cases. Has test change resiliency feature
+
     Args:
-        body (TestCase):
+        body (NewTestCase):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -133,11 +137,12 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    body: TestCase,
+    body: NewTestCase,
 ) -> Optional[TestCase]:
-    """
+    """Create Test Cases. Has test change resiliency feature
+
     Args:
-        body (TestCase):
+        body (NewTestCase):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

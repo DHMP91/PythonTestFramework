@@ -14,13 +14,13 @@ class SearchTestCase:
     Attributes:
         name (str):
         relative_path (str):
-        code_hash (Union[None, Unset, str]):
+        code_hash (str):
         internal_id (Union[None, Unset, str]):
     """
 
     name: str
     relative_path: str
-    code_hash: Union[None, Unset, str] = UNSET
+    code_hash: str
     internal_id: Union[None, Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -29,11 +29,7 @@ class SearchTestCase:
 
         relative_path = self.relative_path
 
-        code_hash: Union[None, Unset, str]
-        if isinstance(self.code_hash, Unset):
-            code_hash = UNSET
-        else:
-            code_hash = self.code_hash
+        code_hash = self.code_hash
 
         internal_id: Union[None, Unset, str]
         if isinstance(self.internal_id, Unset):
@@ -47,10 +43,9 @@ class SearchTestCase:
             {
                 "name": name,
                 "relative_path": relative_path,
+                "code_hash": code_hash,
             }
         )
-        if code_hash is not UNSET:
-            field_dict["code_hash"] = code_hash
         if internal_id is not UNSET:
             field_dict["internal_id"] = internal_id
 
@@ -63,14 +58,7 @@ class SearchTestCase:
 
         relative_path = d.pop("relative_path")
 
-        def _parse_code_hash(data: object) -> Union[None, Unset, str]:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(Union[None, Unset, str], data)
-
-        code_hash = _parse_code_hash(d.pop("code_hash", UNSET))
+        code_hash = d.pop("code_hash")
 
         def _parse_internal_id(data: object) -> Union[None, Unset, str]:
             if data is None:

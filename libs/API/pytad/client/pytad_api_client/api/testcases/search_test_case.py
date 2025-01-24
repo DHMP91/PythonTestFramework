@@ -5,24 +5,34 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.test_run import TestRun
+from ...models.search_test_case import SearchTestCase
+from ...models.test_case import TestCase
 from ...types import Response
 
 
 def _get_kwargs(
-    id: int,
+    *,
+    body: SearchTestCase,
 ) -> Dict[str, Any]:
+    headers: Dict[str, Any] = {}
+
     _kwargs: Dict[str, Any] = {
-        "method": "get",
-        "url": f"/testcases/api/testrun/{id}",
+        "method": "post",
+        "url": "/testcases/api/testcase/search",
     }
 
+    _body = body.to_dict()
+
+    _kwargs["json"] = _body
+    headers["Content-Type"] = "application/json"
+
+    _kwargs["headers"] = headers
     return _kwargs
 
 
-def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[TestRun]:
+def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[TestCase]:
     if response.status_code == 200:
-        response_200 = TestRun.from_dict(response.json())
+        response_200 = TestCase.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -31,7 +41,7 @@ def _parse_response(*, client: Union[AuthenticatedClient, Client], response: htt
         return None
 
 
-def _build_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Response[TestRun]:
+def _build_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Response[TestCase]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -41,24 +51,26 @@ def _build_response(*, client: Union[AuthenticatedClient, Client], response: htt
 
 
 def sync_detailed(
-    id: int,
     *,
     client: AuthenticatedClient,
-) -> Response[TestRun]:
-    """
+    body: SearchTestCase,
+) -> Response[TestCase]:
+    """Search for test cases based on test's fields. Precedence order: internal_id, relative_path, code
+    hash
+
     Args:
-        id (int):
+        body (SearchTestCase):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[TestRun]
+        Response[TestCase]
     """
 
     kwargs = _get_kwargs(
-        id=id,
+        body=body,
     )
 
     response = client.get_httpx_client().request(
@@ -69,47 +81,51 @@ def sync_detailed(
 
 
 def sync(
-    id: int,
     *,
     client: AuthenticatedClient,
-) -> Optional[TestRun]:
-    """
+    body: SearchTestCase,
+) -> Optional[TestCase]:
+    """Search for test cases based on test's fields. Precedence order: internal_id, relative_path, code
+    hash
+
     Args:
-        id (int):
+        body (SearchTestCase):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        TestRun
+        TestCase
     """
 
     return sync_detailed(
-        id=id,
         client=client,
+        body=body,
     ).parsed
 
 
 async def asyncio_detailed(
-    id: int,
     *,
     client: AuthenticatedClient,
-) -> Response[TestRun]:
-    """
+    body: SearchTestCase,
+) -> Response[TestCase]:
+    """Search for test cases based on test's fields. Precedence order: internal_id, relative_path, code
+    hash
+
     Args:
-        id (int):
+        body (SearchTestCase):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[TestRun]
+        Response[TestCase]
     """
 
     kwargs = _get_kwargs(
-        id=id,
+        body=body,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -118,25 +134,27 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    id: int,
     *,
     client: AuthenticatedClient,
-) -> Optional[TestRun]:
-    """
+    body: SearchTestCase,
+) -> Optional[TestCase]:
+    """Search for test cases based on test's fields. Precedence order: internal_id, relative_path, code
+    hash
+
     Args:
-        id (int):
+        body (SearchTestCase):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        TestRun
+        TestCase
     """
 
     return (
         await asyncio_detailed(
-            id=id,
             client=client,
+            body=body,
         )
     ).parsed
