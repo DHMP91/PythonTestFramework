@@ -28,6 +28,13 @@ from libs.API.pytad.client.pytad_api_client.types import Response
 
 LOGGER = logging.getLogger(__name__)
 
+def pytest_addoption(parser):
+    parser.addoption("--product_version", action="store", default="default name")
+
+
+@pytest.fixture(scope="session")
+def product_version(pytestconfig):
+    return pytestconfig.getoption("product_version", None)
 
 class PyTADInvalidTokenException(Exception):
     pass
@@ -64,7 +71,7 @@ def pytad_client(variables, pytad_configured) -> AuthenticatedClient:
         return AuthenticatedClient(base_url=url, prefix="Token", token=token)
 
 @pytest.fixture(autouse=True)
-def pytad_test_setup_teardown(request, pytad_configured, pytad_client) -> int:
+def pytad_test_setup_teardown(request, pytad_configured, pytad_client, product_version) -> int:
     if pytad_configured:
         # Setup: create/reuse test case and create a new test run for test
         test_function = request.node.function
@@ -78,7 +85,7 @@ def pytad_test_setup_teardown(request, pytad_configured, pytad_client) -> int:
         yield test_run_id
         # Teardown: update test if a test run exists
         if test_run_id:
-            __update_test(pytad_client, request, test_run_id)
+            __update_test(pytad_client, request, test_run_id, product_version)
     else:
         LOGGER.debug("PYTAD is not configured")
         yield
@@ -146,7 +153,7 @@ def __create_test_run(client: AuthenticatedClient, test_id: int, test_run_name: 
     else:
         LOGGER.error(f"PYTAD test run creation failed. {response.status_code} reason={response.content}")
 
-def __update_test(client: AuthenticatedClient, request, test_run_id: int):
+def __update_test(client: AuthenticatedClient, request, test_run_id: int, product_version: str = None):
     """
     Update the test run with status, endtime, marks
 
@@ -173,6 +180,7 @@ def __update_test(client: AuthenticatedClient, request, test_run_id: int):
     test_run = get_response.parsed
     test_run.status = status
     test_run.end_time = datetime.datetime.now()
+    test_run.product_version = product_version
     marks = [mark.name for mark in request.node.iter_markers()]
     test_run.marks = ",".join(marks)
 
